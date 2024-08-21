@@ -100,6 +100,9 @@ export default class NavBar extends HTMLElement {
   }
 
   handleEvents() {
+    window.addEventListener("resize", () => {
+      this.setFocusableElements();
+    });
     this.hamburgerIcon.addEventListener("click", () => {
       this.openMenu();
     });
