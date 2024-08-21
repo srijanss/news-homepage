@@ -10,6 +10,13 @@ export default class NavBar extends HTMLElement {
   connectedCallback() {
     this.shadow = this.attachShadow({ mode: "open" });
     this.render();
+
+    this.hamburgerIcon = this.shadow.getElementById("hamburger-icon");
+    this.closeIcon = this.shadow.getElementById("close-icon");
+    this.menu = this.shadow.getElementById("menu");
+    this.linkList = this.shadow.querySelectorAll("nav a");
+
+    this.setFocusableElements();
     this.handleEvents();
   }
 
@@ -29,19 +36,19 @@ export default class NavBar extends HTMLElement {
           </button>
           <ul>
             <li>
-              <slot name="home-link"></slot>
+              <a href="#">Home</a>
             </li>
             <li>
-              <slot name="new-link"></slot>
+              <a href="#new-heading"> New </a>
             </li>
             <li>
-              <slot name="popular-link"></slot>
+              <a href="#popular"> Popular </a>
             </li>
             <li>
-              <slot name="trending-link"></slot>
+              <a href="#"> Trending </a>
             </li>
             <li>
-              <slot name="categories-link"></slot>
+              <a href="#"> Categories </a>
             </li>
           </ul>
         </div>
@@ -49,21 +56,56 @@ export default class NavBar extends HTMLElement {
     `;
   }
 
-  handleEvents() {
-    const hamburgerIcon = this.shadow.getElementById("hamburger-icon");
-    const closeIcon = this.shadow.getElementById("close-icon");
-    const menu = this.shadow.getElementById("menu");
+  openMenu() {
+    this.menu.classList.add("open");
+    this.addFocusToMenuItems();
+  }
 
-    hamburgerIcon.addEventListener("click", () => {
-      menu.classList.add("open");
-      hamburgerIcon.setAttribute("aria-expanded", "true");
-      closeIcon.setAttribute("aria-expanded", "true");
+  closeMenu() {
+    this.menu.classList.remove("open");
+    this.removeFocusFromMenuItems();
+  }
+
+  addFocusToMenuItems() {
+    this.hamburgerIcon.setAttribute("aria-expanded", "true");
+    this.hamburgerIcon.setAttribute("aria-hidden", "true");
+    this.closeIcon.setAttribute("aria-expanded", "true");
+    this.closeIcon.setAttribute("aria-hidden", "false");
+    this.closeIcon.setAttribute("tabindex", "0");
+    Array.from(this.linkList).forEach((link) => {
+      link.setAttribute("tabindex", "0");
+      link.setAttribute("aria-hidden", "false");
+    });
+  }
+
+  removeFocusFromMenuItems() {
+    this.hamburgerIcon.setAttribute("aria-expanded", "false");
+    this.hamburgerIcon.setAttribute("aria-hidden", "false");
+    this.closeIcon.setAttribute("aria-expanded", "false");
+    this.closeIcon.setAttribute("aria-hidden", "true");
+    this.closeIcon.setAttribute("tabindex", "-1");
+    Array.from(this.linkList).forEach((link) => {
+      link.setAttribute("tabindex", "-1");
+      link.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  setFocusableElements() {
+    const hamburgerIconVisible = getComputedStyle(this.hamburgerIcon).display;
+    if (hamburgerIconVisible !== "none") {
+      this.removeFocusFromMenuItems();
+    } else {
+      this.addFocusToMenuItems();
+    }
+  }
+
+  handleEvents() {
+    this.hamburgerIcon.addEventListener("click", () => {
+      this.openMenu();
     });
 
-    closeIcon.addEventListener("click", () => {
-      menu.classList.remove("open");
-      hamburgerIcon.setAttribute("aria-expanded", "false");
-      closeIcon.setAttribute("aria-expanded", "false");
+    this.closeIcon.addEventListener("click", () => {
+      this.closeMenu();
     });
   }
 }
