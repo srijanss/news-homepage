@@ -42,6 +42,17 @@ header {
   justify-content: space-between;
   margin: 2rem 1rem;
   margin-top: 1.75rem;
+
+  @mixin media-query-desktop {
+    width: 1110px;
+    margin: 0 auto;
+    margin-top: 5.5625rem;
+    margin-bottom: 3.5rem;
+    & img {
+      width: 64px;
+      height: 40px;
+    }
+  }
 }
 
 main {
@@ -95,17 +106,19 @@ main {
   & #complementary-section {
     grid-area: complementary;
     background-color: var(--color-very-dark-blue);
-    padding: 1.5rem 1.25rem;
+    padding: 1.5rem 1.25rem; /* 24px 20px */
 
     & h2 {
       font-size: 2rem;
       font-variation-settings: "wght" var(--fw-extra-bold);
+      line-height: 1;
       color: var(--color-soft-orange);
       margin-bottom: 2.1875rem; /* 35px */
     }
 
     & h3 {
       margin-bottom: 0.5rem;
+      line-height: 1.2;
       & a {
         font-size: 1.25rem; /* 20px */
         font-variation-settings: "wght" var(--fw-extra-bold);
@@ -178,6 +191,58 @@ main {
         line-height: 1.7;
         color: var(--color-dark-grayish-blue);
       }
+    }
+  }
+
+  @mixin media-query-desktop {
+    width: 1110px;
+    margin: 0 auto;
+    padding: 0;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "hero complementary"
+      "popular popular";
+    column-gap: 1.875rem;
+
+    & #hero-section {
+      width: 730px;
+      display: grid;
+      grid-template-areas:
+        "hero-image hero-image"
+        "title content"
+        "title button";
+      column-gap: 1.875rem; /* 30px */
+      row-gap: 1.72rem;
+      & picture {
+        grid-area: hero-image;
+        height: 300px;
+      }
+      & h1 {
+        grid-area: title;
+        font-size: 3.5rem; /* 56px */
+        margin: 0;
+      }
+
+      & p {
+        grid-area: content;
+        margin: 0;
+      }
+
+      & #read-more-link {
+        grid-area: button;
+        margin: 0;
+      }
+    }
+    & #complementary-section {
+      padding: 2rem 1.5rem; /* 32px 24px */
+
+      & h2 {
+        font-size: 2.5rem;
+        margin-bottom: 2.125rem;
+      }
+    }
+    & #popular-section {
+      flex-direction: row;
     }
   }
 }
