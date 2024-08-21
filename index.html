@@ -18,39 +18,19 @@
   </head>
   <body>
     <header>
-      <a href="/">
-        <img
-          src="./assets/images/logo.svg"
-          alt="News homepage logo"
-          width="50"
-          height="50"
-        />
-      </a>
-      <button id="hamburger-icon" aria-expanded="false" aria-controls="menu">
-        <img src="./assets/images/icon-menu.svg" alt="Menu" />
-      </button>
-      <nav id="menu" aria-label="Primary">
-        <button id="close-icon" aria-expanded="false" aria-controls="menu">
-          <img src="./assets/images/icon-menu-close.svg" alt="Close Menu" />
-        </button>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="#new-heading"> New </a>
-          </li>
-          <li>
-            <a href="#popular"> Popular </a>
-          </li>
-          <li>
-            <a href="#"> Trending </a>
-          </li>
-          <li>
-            <a href="#"> Categories </a>
-          </li>
-        </ul>
-      </nav>
+      <img
+        src="./assets/images/logo.svg"
+        alt="News homepage logo"
+        width="45"
+        height="28"
+      />
+      <news-nav-bar>
+        <a href="/" slot="home-link">Home</a>
+        <a href="#new-heading" slot="new-link"> New </a>
+        <a href="#popular" slot="popular-link"> Popular </a>
+        <a href="#" slot="trending-link"> Trending </a>
+        <a href="#" slot="categories-link"> Categories </a>
+      </news-nav-bar>
     </header>
     <main>
       <article aria-labelledby="main-heading">

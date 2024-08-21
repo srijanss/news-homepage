@@ -1,1 +1,3 @@
-console.log("Hello from app.js");
+import NavBar from "./components/NavBar";
+
+customElements.define("news-nav-bar", NavBar);
