@@ -93,9 +93,17 @@ export default class NavBar extends HTMLElement {
     });
   }
 
-  setFocusableElements() {
+  isHamburgerIconVisible() {
+    this.hamburgerIconVisible = false;
     const hamburgerIconVisible = getComputedStyle(this.hamburgerIcon).display;
     if (hamburgerIconVisible !== "none") {
+      this.hamburgerIconVisible = true;
+    }
+  }
+
+  setFocusableElements() {
+    this.isHamburgerIconVisible();
+    if (this.hamburgerIconVisible) {
       this.removeFocusFromMenuItems();
     } else {
       this.addFocusToMenuItems();
@@ -121,8 +129,10 @@ export default class NavBar extends HTMLElement {
       link.addEventListener("keydown", (event) => {
         if (link === this.lastMenuItem) {
           if (event.key === "Tab") {
-            event.preventDefault();
-            this.closeIcon.focus();
+            if (this.hamburgerIconVisible) {
+              event.preventDefault();
+              this.closeIcon.focus();
+            }
           }
         }
         if (event.key === "Enter" || event.key === " ") {
