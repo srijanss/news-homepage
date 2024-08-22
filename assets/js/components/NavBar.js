@@ -15,6 +15,7 @@ export default class NavBar extends HTMLElement {
     this.closeIcon = this.shadow.getElementById("close-icon");
     this.menu = this.shadow.getElementById("menu");
     this.linkList = this.shadow.querySelectorAll("nav a");
+    this.lastMenuItem = this.linkList[this.linkList.length - 1];
 
     this.setFocusableElements();
     this.handleEvents();
@@ -25,13 +26,13 @@ export default class NavBar extends HTMLElement {
       <style>
         ${css}
       </style>
-      <button id="hamburger-icon" aria-expanded="false" aria-controls="menu">
+      <button id="hamburger-icon" aria-label="Open Menu" aria-expanded="false" aria-controls="menu">
         <img src="${HamburguerIcon}" alt="Menu" width="40" height="17" />
       </button>
       <nav id="menu" aria-label="Primary">
         <div class="overlay"></div>
         <div id="menu-content">
-          <button id="close-icon" aria-expanded="false" aria-controls="menu">
+          <button id="close-icon" aria-label="Close Menu" aria-expanded="false" aria-controls="menu">
             <img src="${CloseIcon}" alt="Close Menu" />
           </button>
           <ul>
@@ -39,10 +40,10 @@ export default class NavBar extends HTMLElement {
               <a href="#">Home</a>
             </li>
             <li>
-              <a href="#new-heading"> New </a>
+              <a href="#"> New </a>
             </li>
             <li>
-              <a href="#popular"> Popular </a>
+              <a href="#"> Popular </a>
             </li>
             <li>
               <a href="#"> Trending </a>
@@ -68,10 +69,12 @@ export default class NavBar extends HTMLElement {
 
   addFocusToMenuItems() {
     this.hamburgerIcon.setAttribute("aria-expanded", "true");
-    this.hamburgerIcon.setAttribute("aria-hidden", "true");
     this.closeIcon.setAttribute("aria-expanded", "true");
     this.closeIcon.setAttribute("aria-hidden", "false");
     this.closeIcon.setAttribute("tabindex", "0");
+    setTimeout(() => {
+      this.closeIcon.focus();
+    }, 1);
     Array.from(this.linkList).forEach((link) => {
       link.setAttribute("tabindex", "0");
       link.setAttribute("aria-hidden", "false");
@@ -80,10 +83,10 @@ export default class NavBar extends HTMLElement {
 
   removeFocusFromMenuItems() {
     this.hamburgerIcon.setAttribute("aria-expanded", "false");
-    this.hamburgerIcon.setAttribute("aria-hidden", "false");
     this.closeIcon.setAttribute("aria-expanded", "false");
     this.closeIcon.setAttribute("aria-hidden", "true");
     this.closeIcon.setAttribute("tabindex", "-1");
+    this.hamburgerIcon.focus();
     Array.from(this.linkList).forEach((link) => {
       link.setAttribute("tabindex", "-1");
       link.setAttribute("aria-hidden", "true");
@@ -109,6 +112,26 @@ export default class NavBar extends HTMLElement {
 
     this.closeIcon.addEventListener("click", () => {
       this.closeMenu();
+    });
+
+    Array.from(this.linkList).forEach((link) => {
+      link.addEventListener("click", () => {
+        this.closeMenu();
+      });
+      link.addEventListener("keydown", (event) => {
+        if (link === this.lastMenuItem) {
+          if (event.key === "Tab") {
+            event.preventDefault();
+            this.closeIcon.focus();
+          }
+        }
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setTimeout(() => {
+            this.closeMenu();
+          }, 1);
+        }
+      });
     });
   }
 }
